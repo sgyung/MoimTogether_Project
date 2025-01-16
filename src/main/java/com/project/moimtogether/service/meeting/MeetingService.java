@@ -47,7 +47,7 @@ public class MeetingService {
         Member persistedMember = findPersistedMember(currentMember);
 
         Place place = findPlace(postMeetingReqDTO.getPlaceId());
-
+        
         try {
             MeetingDTO meetingDTO = buildMeetingDTO(postMeetingReqDTO, persistedMember, place);
             Meeting newMeeting = saveNewMeeting(meetingDTO);

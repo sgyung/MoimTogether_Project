@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.LockAcquisitionException;
 import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -57,7 +56,7 @@ public class LikeService {
                 // 새로운 좋아요 등록 및 좋아요 수 업데이트
                 likeToReturn = Likes.createLike(new LikeDTO(member, place, LikeStatus.LIKE));
                 likeToReturn = likeRepository.save(likeToReturn);
-                updatePlaceLikeCount(place); // 좋아요 수 업데이트
+                updateIncreasePlaceLikeCount(place); // 좋아요 수 업데이트
             }
 
             // DTO 반환
@@ -89,7 +88,7 @@ public class LikeService {
                 // 새로운 좋아요 등록 및 좋아요 수 업데이트
                 likeToReturn = Likes.createLike(new LikeDTO(member, place, LikeStatus.LIKE));
                 likeToReturn = likeRepository.save(likeToReturn);
-                updatePlaceLikeCount(place); // 좋아요 수 업데이트
+                updateIncreasePlaceLikeCount(place); // 좋아요 수 업데이트
             }
 
             // DTO 반환
@@ -149,6 +148,26 @@ public class LikeService {
         }
     }
 
+    // 장소 좋아요 취소 서비스
+    public void cancelLike(CancelLikeReqDTO reqDTO, Long memberId) {
+
+        Likes like = queryRepository.findLike(reqDTO.getPlaceId(),memberId, reqDTO.getLikeId());
+
+        if(like == null) {
+            throw new PlaceException(PlaceErrorCode.LIKE_ID_ERROR);
+        }
+        try{
+            like.updateLikeStatus();
+
+            likeRepository.save(like);
+
+            updateDecreasePlaceLikeCount(like.getPlace());
+
+        }catch (Exception e){
+            throw new PlaceException(PlaceErrorCode.UNEXPECTED_ERROR);
+        }
+    }
+
     // 멤버 조회 메서드
     private Member findMemberById(String memberId) {
         return userRepository.findByMemberId(memberId)
@@ -162,8 +181,14 @@ public class LikeService {
     }
 
     @Transactional
-    public void updatePlaceLikeCount(Place place) {
+    public void updateIncreasePlaceLikeCount(Place place) {
         place.updateLikeCount();
+        placeRepository.save(place); // 배타 락이 적용된 상태로 저장
+    }
+
+    @Transactional
+    public void updateDecreasePlaceLikeCount(Place place) {
+        place.decreaseLikeCount();
         placeRepository.save(place); // 배타 락이 적용된 상태로 저장
     }
 
@@ -176,13 +201,13 @@ public class LikeService {
     public void registerNewLike(Member member, Place place) {
         Likes like = Likes.createLike(new LikeDTO(member, place, LikeStatus.LIKE));
         likeRepository.save(like);
-        updatePlaceLikeCount(place); // 좋아요 수 업데이트
+        updateIncreasePlaceLikeCount(place); // 좋아요 수 업데이트
     }
 
     public void handleLikeUpdate(Likes existingLike, Place place) {
         existingLike.updateLikeStatus();
         likeRepository.save(existingLike);
-        updatePlaceLikeCount(place); // 좋아요 수 업데이트
+        updateIncreasePlaceLikeCount(place); // 좋아요 수 업데이트
     }
 
 

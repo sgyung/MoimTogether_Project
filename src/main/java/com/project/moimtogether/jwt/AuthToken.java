@@ -53,7 +53,7 @@ public class AuthToken {
     // JWT 구문 분석 과정에서 예외 발생 시, 해당 예외 처리 후 null 반환
     public Claims getValidTokenClaims() {
         try {
-            return Jwts.parser() // jwt 구문 분석을 위한 builder 객체 생성
+            return Jwts.parserBuilder() // jwt 구문 분석을 위한 builder 객체 생성
                     .setSigningKey(key) // JWT의 서명을 검증할 때 사용할 서몀키. 생성할 때 사용한 키와 동일한 키를 사용
                     .build() // 실제 jwt 파서 객체 생성
                     .parseClaimsJws(token) // 생성된 jwt 파서를 사용해서 주어진 토큰 구문 분석 ( 여기서 서명이 유효한지 확인 )
@@ -75,7 +75,7 @@ public class AuthToken {
     // 만료된 토큰의 클레임 추출
     public Claims getExpiredTokenClaims() {
         try {
-            Jwts.parser()
+            Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)

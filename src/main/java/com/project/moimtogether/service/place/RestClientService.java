@@ -54,8 +54,8 @@ public class RestClientService {
         }
     }
 
-    // 스케줄러 추가: 새벽 6시에 동작
-    @Scheduled(cron = "0 0 6 * * ?")
+    // 스케줄러 추가: 매주 월요일 새벽 6시에 동작
+    @Scheduled(cron = "0 0 6 ? * MON")
     public void scheduleSeoulDataUpdate() {
         log.info("스케줄러 실행: 서울 데이터 업데이트 시작");
         try {
