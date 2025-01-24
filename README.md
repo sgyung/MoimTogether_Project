@@ -15,3 +15,6 @@
 
 ## API문서
 https://www.notion.so/144d6f74e9bc81a39435d21e2d997917?v=144d6f74e9bc8107a913000cf98e0627&pvs=4
+
+## 아키텍처
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/3c6ddaae-e50a-4574-a5b0-52fa0e425105/af1a7f60-7e4e-4fbe-849b-c24a09440619/image.png)
