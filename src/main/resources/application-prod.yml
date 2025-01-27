@@ -2,8 +2,8 @@ spring:
   config:
     import: 'aws-secretsmanager:prod/moimtogether/rds,aws-secretsmanager:prod/moimtogether/secret'
   datasource:
-    driver-class-name: com.amazonaws.secretsmanager.sql.AWSSecretsManagerMySQLDriver
-    url: "jdbc-secretsmanager:mysql://database-1.cb0o66s8s7lt.ap-northeast-2.rds.amazonaws.com:3306/moimtogether"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${host}:${port}/${dbname}
     username: "${username}"
     password: "${password}"
   jpa:
