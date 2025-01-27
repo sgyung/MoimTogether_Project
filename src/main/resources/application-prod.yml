@@ -3,7 +3,7 @@ spring:
     import: 'aws-secretsmanager:prod/moimtogether/rds,aws-secretsmanager:prod/moimtogether/secret'
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${host}:${port}/${dbname}
+    url: 'jdbc:mysql://${host}:${port}/${dbname}'
     username: "${username}"
     password: "${password}"
   jpa:
