@@ -17,13 +17,13 @@ public class CustomUserDetailsDTO implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-//        authorities.add(new GrantedAuthority() {
-//
-//            @Override
-//            public String getAuthority() {
-//                return "ROLE_" + user.getRole();
-//            }
-//        });
+        authorities.add(new GrantedAuthority() {
+
+            @Override
+            public String getAuthority() {
+                return "ROLE_" + member.getMemberRole();
+            }
+        });
 
         return authorities;
     }

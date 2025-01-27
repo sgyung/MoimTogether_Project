@@ -57,6 +57,10 @@ public class Member implements UserDetails {
     @Column(name = "join_date")
     private LocalDateTime joinDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "member_role", nullable = false)
+    private Role memberRole;
+
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MeetingRoom> meetingRooms = new ArrayList<>();
 
@@ -112,6 +116,7 @@ public class Member implements UserDetails {
         member.setMemberGender(gender);
         member.setMemberPhone(phone);
         member.setJoinDate(LocalDateTime.now());
+        member.setMemberRole(Role.USER);
 
         return member;
     }

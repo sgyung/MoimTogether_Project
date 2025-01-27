@@ -59,7 +59,7 @@ public class AuthTokenProvider {
             CustomUserDetailsDTO userDetails = customUserDetailService.loadUserByUsername(authToken.getValidTokenClaims().getSubject());
 
             // 생성된 User 객체와 권한 정보를 사용하여 UsernamePasswordAuthenticationToken 생성
-            return new UsernamePasswordAuthenticationToken(userDetails, authToken, Collections.emptyList());
+            return new UsernamePasswordAuthenticationToken(userDetails, authToken, userDetails.getAuthorities());
         }
         else {
             throw new CustomLogicException(ExceptionCode.USER_NONE);

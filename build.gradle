@@ -38,10 +38,16 @@ dependencies {
 	// 메일 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-	//JUnit4 추가
+	// JUnit4 추가
 	testImplementation("org.junit.vintage:junit-vintage-engine") {
 		exclude group: "org.hamcrest", module: "hamcrest-core"
 	}
+
+	// AWS Spring Cloud 의존성 추가
+	implementation "io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4"
+
+	// AWS Secrets Manager JDBC 드라이버
+	implementation 'com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:1.0.8'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

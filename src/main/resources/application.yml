@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: prod # 기본 활성화 프로파일 (운영 환경에서는 prod로 변경)
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 1000 # 최적화 옵션
+        connection:
+          isolation: 2
+  # 공통 로깅 설정
+  logging.level:
+    org.hibernate.SQL: debug
+
+# API 공통 설정
+api:
+  baseUrl: "http://openapi.seoul.go.kr:8088"
+  type: "json"
