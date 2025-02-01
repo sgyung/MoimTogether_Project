@@ -59,7 +59,7 @@ public class SecurityConfiguration {
                         "/api/sign-up",
                         "/api/login",
                         "/",
-                        "/api-docs/**",
+                        "/v3/api-docs/**",
                         "/api/seoul-data",
                         "/api/places").permitAll() // 인증 필요 없음
                 .anyRequest().authenticated() // 나머지는 인증 필요

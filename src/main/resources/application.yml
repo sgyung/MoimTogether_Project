@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: prod # 기본 활성화 프로파일 (운영 환경에서는 prod로 변경)
+    active: dev # 기본 활성화 프로파일 (운영 환경에서는 prod로 변경)
   jpa:
     hibernate:
       naming:
@@ -19,3 +19,5 @@ spring:
 api:
   baseUrl: "http://openapi.seoul.go.kr:8088"
   type: "json"
+
+
