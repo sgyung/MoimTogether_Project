@@ -19,4 +19,4 @@ else
 fi
 
 echo "> Deploy - $JAR_PATH "
-nohup java -jar -Dspring.profiles.active=prod $JAR_PATH 1> /home/ubuntu/nohup.out 2>&1 & #백그라운드 실행 중
+nohup java -jar -Dspring.profiles.active=prod $JAR_PATH 1> /home/ubuntu/nohup.out 2>&1 & #백그라운드 실행
