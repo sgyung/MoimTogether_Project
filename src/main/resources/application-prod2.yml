@@ -2,8 +2,9 @@ server:
   port: 8081
 
 spring:
-  profiles: prod2
   config:
+    activate:
+      on-profile: prod2
     import: 'aws-secretsmanager:prod/moimtogether/rds,aws-secretsmanager:prod/moimtogether/secret'
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
