@@ -1,8 +1,8 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
-  profiles: prod
+  profiles: prod2
   config:
     import: 'aws-secretsmanager:prod/moimtogether/rds,aws-secretsmanager:prod/moimtogether/secret'
   datasource:
