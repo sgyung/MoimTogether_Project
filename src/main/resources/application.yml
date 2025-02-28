@@ -20,4 +20,10 @@ api:
   baseUrl: "http://openapi.seoul.go.kr:8088"
   type: "json"
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
 
