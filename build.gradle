@@ -49,6 +49,8 @@ dependencies {
 	// AWS Secrets Manager JDBC 드라이버
 	implementation 'com.amazonaws.secretsmanager:aws-secretsmanager-jdbc:1.0.8'
 
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
