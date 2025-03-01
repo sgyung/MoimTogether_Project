@@ -13,8 +13,8 @@ LOG_FILE=/home/ubuntu/deploy.log
 
 echo "> 현재 실행 중인 애플리케이션 확인"
 
-BLUE_PID=$(lsof -ti tcp:$BLUE_PORT)
-GREEN_PID=$(lsof -ti tcp:$GREEN_PORT)
+BLUE_PID=$(sudo lsof -ti :$BLUE_PORT)
+GREEN_PID=$(sudo lsof -ti :$GREEN_PORT)
 
 echo "현재 블루 PID: $BLUE_PID"
 echo "현재 그린 PID: $GREEN_PID"
@@ -30,7 +30,7 @@ elif [ -z "$GREEN_PID" ]; then
     BEFORE_PORT=$BLUE_PORT  # 롤백 시 사용할 포트
     echo "> 그린(8081)로 배포합니다."
 else
-    echo "❌ 블루와 그린이 모두 실행 중입니다."
+    echo "블루와 그린이 모두 실행 중입니다."
     exit 1
 fi
 
@@ -49,7 +49,7 @@ do
     fi
 
     if [ $i -eq 10 ]; then
-        echo "❌ 서비스 기동 실패 (port: $TARGET_PORT)"
+        echo "서비스 기동 실패 (port: $TARGET_PORT)"
 
         # 신규 서비스 종료 (실패한 버전 종료)
         NEW_PID=$(lsof -ti tcp:$TARGET_PORT)
