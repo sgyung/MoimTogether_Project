@@ -62,7 +62,8 @@ public class SecurityConfiguration {
                         "/v3/api-docs/**",
                         "/api/seoul-data",
                         "/api/places",
-                        "/api/environment").permitAll() // 인증 필요 없음
+                        "/api/environment",
+                        "/actuator/health").permitAll() // 인증 필요 없음
                 .anyRequest().authenticated() // 나머지는 인증 필요
         );
 
