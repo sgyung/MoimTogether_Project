@@ -21,12 +21,10 @@ echo "현재 그린 PID: $GREEN_PID"
 
 if [ -z "$BLUE_PID" ]; then
     TARGET_PORT=$BLUE_PORT
-    TARGET_PROFILE="prod"
     BEFORE_PORT=$GREEN_PORT  # 롤백 시 사용할 포트
     echo "> 블루(8080)로 배포합니다."
 elif [ -z "$GREEN_PID" ]; then
     TARGET_PORT=$GREEN_PORT
-    TARGET_PROFILE="prod2"
     BEFORE_PORT=$BLUE_PORT  # 롤백 시 사용할 포트
     echo "> 그린(8081)로 배포합니다."
 else
@@ -35,7 +33,7 @@ else
 fi
 
 echo "> JAR 파일 배포 - $JAR_PATH"
-nohup java -jar -Dspring.profiles.active=$TARGET_PROFILE $JAR_PATH --server.port=$TARGET_PORT > /home/ubuntu/nohup.out 2>&1 &
+nohup java -jar -Dspring.profiles.active=prod $JAR_PATH --server.port=$TARGET_PORT > /home/ubuntu/nohup.out 2>&1 &
 
 # 신규 버전 기동 확인 (최대 10초 대기)
 for i in {1..10}
