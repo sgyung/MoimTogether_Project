@@ -38,7 +38,7 @@ nohup java -jar -Dspring.profiles.active=prod $JAR_PATH --server.port=$TARGET_PO
 # 배포 후 10초 대기 (애플리케이션 실행을 기다림)
 sleep 10
 
-# 포트가 열릴 때까지 최대 30초 대기
+# 포트가 열릴 때까지 최대 30초 대기.
 for i in {1..30}
 do
     NEW_PID=$(sudo lsof -ti :$TARGET_PORT)
