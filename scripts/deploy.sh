@@ -35,11 +35,11 @@ fi
 echo "> JAR 파일 배포 - $JAR_PATH"
 nohup java -jar -Dspring.profiles.active=prod $JAR_PATH --server.port=$TARGET_PORT > /home/ubuntu/nohup.out 2>&1 &
 
-#배포 후 5초 대기 (애플리케이션 실행을 기다림)
-sleep 5
+# 배포 후 10초 대기 (애플리케이션 실행을 기다림)
+sleep 10
 
-#포트가 열릴 때까지 최대 10초 대기
-for i in {1..10}
+# 포트가 열릴 때까지 최대 30초 대기
+for i in {1..30}
 do
     NEW_PID=$(sudo lsof -ti :$TARGET_PORT)
 
@@ -50,14 +50,14 @@ do
 
     sleep 1
 
-    if [ $i -eq 10 ]; then
-        echo "> 애플리케이션이 10초 내에 기동되지 않음. 배포 실패"
+    if [ $i -eq 30 ]; then
+        echo "> 애플리케이션이 30초 내에 기동되지 않음. 배포 실패"
         exit 1
     fi
 done
 
-# 신규 버전 기동 확인 (최대 10초 대기)
-for i in {1..10}
+# 헬스체크 시작 (최대 20초 대기)
+for i in {1..20}
 do
     sleep 1
     RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:$TARGET_PORT/actuator/health)
@@ -67,7 +67,7 @@ do
         break
     fi
 
-    if [ $i -eq 10 ]; then
+    if [ $i -eq 20 ]; then
         echo "서비스 기동 실패 (port: $TARGET_PORT)"
 
         # 신규 서비스 종료 (실패한 버전 종료)
