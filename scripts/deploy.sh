@@ -52,6 +52,12 @@ do
 
     if [ $i -eq 30 ]; then
         echo "> 애플리케이션이 30초 내에 기동되지 않음. 배포 실패"
+        NEW_PID=$(sudo lsof -ti :$TARGET_PORT)
+        if [ ! -z "$NEW_PID" ]; then
+            echo "> 배포 실패로 신규 서비스 종료 (PID: $NEW_PID)"
+            kill -15 $NEW_PID
+            sleep 5  # 프로세스 종료 대기
+        fi
         exit 1
     fi
 done
@@ -76,6 +82,7 @@ do
         if [ ! -z "$NEW_PID" ]; then
             echo "> 배포 실패로 신규 서비스 종료 (PID: $NEW_PID)"
             kill -15 $NEW_PID
+            sleep 5
         fi
 
         # Nginx 롤백 (기존 포트로 되돌리기)
