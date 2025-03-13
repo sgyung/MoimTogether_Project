@@ -81,8 +81,29 @@ jobs:
           fi
 
       - name: Code Deploy To EC2 instance
-        run: aws deploy create-deployment \
+        run: |
+          DEPLOYMENT_ID=$(aws deploy create-deployment \
                 --application-name $CODE_DEPLOY_APP_NAME \
                 --deployment-config-name CodeDeployDefault.AllAtOnce \
                 --deployment-group-name $DEPLOYMENT_GROUP_NAME \
-                --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
+                --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip \
+                --query "deploymentId" --output text)
+
+          echo "Waiting for CodeDeploy deployment ($DEPLOYMENT_ID) to complete..."
+          
+          for i in {1..30}; do
+            STATUS=$(aws deploy get-deployment \
+              --deployment-id $DEPLOYMENT_ID \
+              --query "deploymentInfo.status" --output text)
+
+            if [[ "$STATUS" == "Succeeded" ]]; then
+              echo "Deployment completed successfully!"
+              break
+            elif [[ "$STATUS" == "Failed" || "$STATUS" == "Stopped" ]]; then
+              echo "Deployment failed or was stopped. Exiting."
+              exit 1
+            fi
+
+            echo "Deployment is still in progress ($STATUS)... Waiting 10 seconds."
+            sleep 10
+          done
