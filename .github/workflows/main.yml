@@ -53,23 +53,31 @@ jobs:
             --query "deployments[0]" --output text)
 
           if [ "$ACTIVE_DEPLOYMENT" != "None" ]; then
-            echo "Cancelling active deployment: $ACTIVE_DEPLOYMENT"
-            aws deploy stop-deployment --deployment-id $ACTIVE_DEPLOYMENT
-            
-            echo "Waiting for deployment cancellation..."
-            while true; do
-              STATUS=$(aws deploy get-deployment \
-                --deployment-id $ACTIVE_DEPLOYMENT \
-                --query "deploymentInfo.status" --output text)
-              
-              if [[ "$STATUS" == "Succeeded" || "$STATUS" == "Failed" || "$STATUS" == "Stopped" ]]; then
-                echo "Deployment cancelled successfully."
-                break
-              fi
-              
-              echo "Deployment still active... waiting 10 seconds."
-              sleep 10
-            done
+            STATUS=$(aws deploy get-deployment \
+              --deployment-id $ACTIVE_DEPLOYMENT \
+              --query "deploymentInfo.status" --output text)
+
+            if [[ "$STATUS" == "Created" || "$STATUS" == "Queued" || "$STATUS" == "InProgress" ]]; then
+              echo "Cancelling active deployment: $ACTIVE_DEPLOYMENT"
+              aws deploy stop-deployment --deployment-id $ACTIVE_DEPLOYMENT
+
+              echo "Waiting for deployment cancellation..."
+              while true; do
+                STATUS=$(aws deploy get-deployment \
+                  --deployment-id $ACTIVE_DEPLOYMENT \
+                  --query "deploymentInfo.status" --output text)
+
+                if [[ "$STATUS" == "Succeeded" || "$STATUS" == "Failed" || "$STATUS" == "Stopped" ]]; then
+                  echo "Deployment cancelled successfully."
+                  break
+                fi
+                
+                echo "Deployment still active... waiting 10 seconds."
+                sleep 10
+              done
+            else
+              echo "Deployment is already in state: $STATUS. No need to cancel."
+            fi
           fi
 
       - name: Code Deploy To EC2 instance
