@@ -19,17 +19,22 @@ GREEN_PID=$(sudo lsof -ti :$GREEN_PORT)
 echo "현재 블루 PID: $BLUE_PID"
 echo "현재 그린 PID: $GREEN_PID"
 
-if [ -z "$BLUE_PID" ]; then
-    TARGET_PORT=$BLUE_PORT
-    BEFORE_PORT=$GREEN_PORT  # 롤백 시 사용할 포트
-    echo "> 블루(8080)로 배포합니다."
-elif [ -z "$GREEN_PID" ]; then
+if [ -n "$BLUE_PID" ]; then
     TARGET_PORT=$GREEN_PORT
-    BEFORE_PORT=$BLUE_PORT  # 롤백 시 사용할 포트
-    echo "> 그린(8081)로 배포합니다."
+    BEFORE_PORT=$BLUE_PORT
+    echo "> 기존 블루(8080) 종료 후 그린(8081)으로 배포합니다."
+    sudo kill -15 $BLUE_PID
+    sleep 5
+elif [ -n "$GREEN_PID" ]; then
+    TARGET_PORT=$BLUE_PORT
+    BEFORE_PORT=$GREEN_PORT
+    echo "> 기존 그린(8081) 종료 후 블루(8080)으로 배포합니다."
+    sudo kill -15 $GREEN_PID
+    sleep 5
 else
-    echo "블루와 그린이 모두 실행 중입니다."
-    exit 1
+    TARGET_PORT=$BLUE_PORT
+    BEFORE_PORT=$GREEN_PORT
+    echo "> 실행 중인 애플리케이션이 없어 블루(8080)로 배포합니다."
 fi
 
 echo "> JAR 파일 배포 - $JAR_PATH"
