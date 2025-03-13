@@ -78,7 +78,7 @@ do
 
         # 신규 서비스 종료 (실패한 버전 종료)
         NEW_PID=$(sudo lsof -ti :$TARGET_PORT)
-        echo "> 신규 서비스 (PID: $NEW_PID)"
+        echo "> 신규 서비스 PID (PID: $NEW_PID)"
         if [ ! -z "$NEW_PID" ]; then
             echo "> 배포 실패로 신규 서비스 종료 (PID: $NEW_PID)"
             kill -15 $NEW_PID
